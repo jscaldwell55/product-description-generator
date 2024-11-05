@@ -9,7 +9,7 @@ os.environ['STREAMLIT_SERVER_PORT'] = os.environ.get('PORT', '8501')
 
 # Page config
 st.set_page_config(
-    page_title="Product Description Generator",
+    page_title="Jay's Product Description Generator",
     page_icon="✨",
     layout="wide"
 )
@@ -54,8 +54,8 @@ def generate_description(product_info, tone, target_length="medium"):
         return None
 
 # Main UI
-st.title("✨ Product Description Generator")
-st.write("Transform basic product information into compelling marketing copy!")
+st.title("✨ Jay's Product Description Generator")
+st.write("Transform basic product information into engaging marketing content!")
 
 # Input sections
 with st.form("product_form"):
