@@ -55,7 +55,7 @@ def generate_description(product_info, tone, target_length="medium"):
 
 # Main UI
 st.title("✨ Jay's Product Description Generator")
-st.write("Transform basic product information into engaging marketing content!")
+st.write("Transform basic product information into marketing-ready content")
 
 # Input sections
 with st.form("product_form"):
