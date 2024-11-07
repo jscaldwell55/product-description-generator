@@ -53,7 +53,8 @@ SEGMENTS = {
             "Technical Architect",
             "DevOps Engineer",
             "Technical Founder",
-            "Product Manager"
+            "Product Manager",
+            "Developer"
         ],
         "specific_needs": "API access, documentation, flexible integration, SDKs, sample code"
     },
@@ -119,29 +120,52 @@ def generate_content(feature, segment, persona, content_type, tone):
         segment_info = SEGMENTS[segment]
         content_info = CONTENT_TYPES[content_type]
         
-        prompt = f"""
-        Generate {content_type} content for Vapi's voice AI technology feature: {feature}
+        if persona == "No Persona":
+            prompt = f"""
+            Generate {content_type} content for Vapi's voice AI technology feature: {feature}
 
-        Target Audience:
-        - Segment: {segment} (Focus: {segment_info['focus']})
-        - Specific Persona: {persona}
-        - Specific Needs: {segment_info['specific_needs']}
-        
-        Content Requirements:
-        - Type: {content_type}
-        - Focus: {content_info['focus']}
-        - Style: {content_info['style']}
-        - Tone: {tone}
-        
-        Additional Requirements:
-        1. Highlight benefits specific to this {persona}'s needs
-        2. Address key pain points for {segment} segment
-        3. Include relevant use cases
-        4. Emphasize Vapi's voice AI value proposition
-        5. Include appropriate call-to-action for {content_type}
-        
-        Make the content compelling and focused on how Vapi's voice AI technology solves specific challenges for this persona.
-        """
+            Target Audience:
+            - Segment: {segment} (Focus: {segment_info['focus']})
+            - Specific Needs: {segment_info['specific_needs']}
+            
+            Content Requirements:
+            - Type: {content_type}
+            - Focus: {content_info['focus']}
+            - Style: {content_info['style']}
+            - Tone: {tone}
+            
+            Additional Requirements:
+            1. Address key pain points for {segment} segment
+            2. Include relevant use cases
+            3. Emphasize Vapi's voice AI value proposition
+            4. Include appropriate call-to-action for {content_type}
+            
+            Make the content compelling and focused on how Vapi's voice AI technology solves specific challenges for this segment.
+            """
+        else:
+            prompt = f"""
+            Generate {content_type} content for Vapi's voice AI technology feature: {feature}
+
+            Target Audience:
+            - Segment: {segment} (Focus: {segment_info['focus']})
+            - Specific Persona: {persona}
+            - Specific Needs: {segment_info['specific_needs']}
+            
+            Content Requirements:
+            - Type: {content_type}
+            - Focus: {content_info['focus']}
+            - Style: {content_info['style']}
+            - Tone: {tone}
+            
+            Additional Requirements:
+            1. Highlight benefits specific to this {persona}'s needs
+            2. Address key pain points for {segment} segment
+            3. Include relevant use cases
+            4. Emphasize Vapi's voice AI value proposition
+            5. Include appropriate call-to-action for {content_type}
+            
+            Make the content compelling and focused on how Vapi's voice AI technology solves specific challenges for this persona.
+            """
         
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -176,7 +200,7 @@ with st.form("content_form"):
         segment = st.selectbox("Select Customer Segment", list(SEGMENTS.keys()))
     
     with col2:
-        selected_personas = SEGMENTS[segment]["personas"]
+        selected_personas = ["No Persona"] + SEGMENTS[segment]["personas"]
         persona = st.selectbox("Select Specific Persona", selected_personas)
     
     with col3:
