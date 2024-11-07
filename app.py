@@ -51,15 +51,16 @@ SEGMENTS = {
         ],
         "specific_needs": "API access, documentation, flexible integration"
     },
-    "Healthcare Providers": {
-        "focus": "Patient interaction automation and telemedicine support",
+    "Call Centers": {
+        "focus": "Voice AI automation and enhancement for customer service operations",
         "personas": [
-            "Healthcare Operations Manager",
-            "Medical Practice Owner",
-            "Telemedicine Director",
-            "Patient Experience Manager"
+            "Call Center Director",
+            "Customer Service Operations Manager",
+            "Quality Assurance Manager",
+            "Workforce Optimization Manager",
+            "Training and Development Lead"
         ],
-        "specific_needs": "HIPAA compliance, patient privacy, engagement tools"
+        "specific_needs": "Agent augmentation, call analytics, quality monitoring, training tools"
     },
     "Education Platforms": {
         "focus": "Voice-based learning and tutoring capabilities",
@@ -222,7 +223,7 @@ with st.expander("💡 Tips for best results"):
     - **Enterprise**: Focus on scalability, security, and integration
     - **SMBs**: Emphasize ease of use and cost-effectiveness
     - **Developers**: Highlight API capabilities and documentation
-    - **Healthcare**: Focus on HIPAA compliance and patient experience
+    - **Call Centers**: Focus on efficiency, agent empowerment, and quality metrics
     - **Education**: Emphasize engagement and accessibility features
     
     ### Content Type Guidelines
@@ -248,6 +249,19 @@ with st.expander("📝 Sample Inputs"):
     - Custom workflow automation
     ```
     
+    ### Call Center Example
+    ```
+    Feature: Agent Assist AI
+    - Real-time agent prompting
+    - Call sentiment analysis
+    - Automated quality scoring
+    - Performance analytics
+    - Multi-language support
+    - Agent training tools
+    - Call disposition automation
+    - Compliance monitoring
+    ```
+    
     ### Developer Example
     ```
     Feature: Voice AI API
@@ -257,16 +271,5 @@ with st.expander("📝 Sample Inputs"):
     - Multiple SDKs available
     - Usage-based pricing
     - Comprehensive documentation
-    ```
-    
-    ### Healthcare Example
-    ```
-    Feature: Patient Engagement Voice AI
-    - HIPAA-compliant voice processing
-    - Appointment scheduling
-    - Medication reminders
-    - Symptom checking
-    - EHR integration
-    - Multi-language support
     ```
     """)
