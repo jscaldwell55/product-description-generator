@@ -44,12 +44,18 @@ SEGMENTS = {
     "Developers/Tech Startups": {
         "focus": "Building applications with voice capabilities",
         "personas": [
-            "Startup Developer",
+            "Frontend Developer",
+            "Backend Developer",
+            "Full Stack Developer",
+            "Mobile App Developer",
+            "API Integration Specialist",
+            "Machine Learning Engineer",
+            "Technical Architect",
+            "DevOps Engineer",
             "Technical Founder",
-            "Product Manager",
-            "API Integration Specialist"
+            "Product Manager"
         ],
-        "specific_needs": "API access, documentation, flexible integration"
+        "specific_needs": "API access, documentation, flexible integration, SDKs, sample code"
     },
     "Call Centers": {
         "focus": "Voice AI automation and enhancement for customer service operations",
@@ -233,6 +239,21 @@ with st.expander("💡 Tips for best results"):
     - **Email Campaigns**: Personalized and action-oriented
     - **Case Studies**: Problem-solution format with results
     - **Landing Pages**: Clear value proposition and benefits
+
+    ### Developer-Specific Considerations
+    - **Frontend Developers**: Focus on client-side SDKs, UI components, and WebSocket implementation
+    - **Backend Developers**: Emphasize API integration, authentication, and server-side processing
+    - **Mobile Developers**: Highlight mobile SDKs, offline capabilities, and performance optimization
+    - **ML Engineers**: Focus on model customization, training capabilities, and analytics
+    - **DevOps**: Address deployment, monitoring, and scaling considerations
+    
+    ### Technical Content Tips
+    - Include code snippets when relevant
+    - Provide specific implementation examples
+    - Reference documentation links
+    - Mention integration patterns
+    - Address performance considerations
+    - Discuss security implementations
     """)
 
 # Add sample input
@@ -262,14 +283,42 @@ with st.expander("📝 Sample Inputs"):
     - Compliance monitoring
     ```
     
-    ### Developer Example
+    ### Developer Examples
     ```
-    Feature: Voice AI API
-    - RESTful API access
-    - WebSocket support
-    - Custom model training
-    - Multiple SDKs available
+    Feature: Voice AI API Integration
+    - RESTful API endpoints
+    - WebSocket support for real-time voice processing
+    - Multiple SDK options (Python, JavaScript, Java, Go)
+    - Custom ML model training capabilities
+    - Extensive API documentation
+    - Interactive API playground
+    - Sandbox testing environment
     - Usage-based pricing
-    - Comprehensive documentation
+    - Rate limiting controls
+    - Error handling and retry logic
+    - Real-time voice analytics
+    - Custom webhook support
+    ```
+
+    ### Developer Tools
+    - API Reference Documentation
+    - Interactive Swagger/OpenAPI specs
+    - Code snippets in multiple languages
+    - Sample applications
+    - WebSocket implementation examples
+    - Voice processing libraries
+    - Testing utilities
+    - Performance monitoring tools
+    ```
+
+    ### Integration Features
+    - OAuth 2.0 authentication
+    - API key management
+    - Rate limiting configuration
+    - Custom model deployment
+    - Webhook configuration
+    - Error logging and monitoring
+    - Performance analytics
+    - Language model fine-tuning
     ```
     """)
