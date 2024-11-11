@@ -183,8 +183,8 @@ def generate_content(feature, segment, persona, content_type, tone):
         return None
 
 # Main UI
-st.title("🎙️ Vapi AI Content Generator")
-st.write("Create targeted content for Vapi's voice AI technology across different segments and formats.")
+st.title("AI Content Generator")
+st.write("Create targeted content for an AI startup across different segments and formats.")
 
 # Input sections
 with st.form("content_form"):
