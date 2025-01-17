@@ -6,8 +6,17 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Initialize OpenAI client
-client = OpenAI()  # Will automatically use OPENAI_API_KEY from environment
+from openai import OpenAI
+import httpx
+
+# Custom client configuration
+timeout = httpx.Timeout(10.0, read=30.0)
+client = OpenAI(
+    http_client=httpx.Client(
+        timeout=timeout,
+        transport=httpx.HTTPTransport(retries=3)
+    )
+)
 
 # Page config (This should come before other Streamlit operations)
 st.set_page_config(
