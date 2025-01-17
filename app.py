@@ -1,216 +1,130 @@
 import os
 import streamlit as st
-from openai import OpenAI
+import openai
 from dotenv import load_dotenv
-
-# Set Streamlit port for Render
-os.environ['STREAMLIT_SERVER_PORT'] = os.environ.get('PORT', '8501')
-
-# Page config
-st.set_page_config(
-    page_title="Vapi AI Content Generator",
-    page_icon="🎙️",
-    layout="wide"
-)
 
 # Load environment variables
 load_dotenv()
 
-# Initialize OpenAI client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Set OpenAI API key
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# Page config (This should come before other Streamlit operations)
+st.set_page_config(
+    page_title="Render AI Content Generator",
+    page_icon="⚡",
+    layout="wide"
+)
 
 # Define customer segments and personas
 SEGMENTS = {
-    "Enterprise Businesses": {
-        "focus": "Large companies seeking voice AI for customer support and call center enhancement",
-        "personas": [
-            "Innovation-Driven CTO",
-            "IT Director",
-            "Customer Experience Leader",
-            "Operations Manager"
-        ],
-        "specific_needs": "Scalability, enterprise integration, security, compliance"
+    "Freelancers": {
+        "focus": "Independent developers and designers looking for a no-code solution to build web applications",
+        "personas": ["Solo Developer", "Freelance Designer"],
+        "specific_needs": "Ease of use, visual editor, backend-agnostic deployment"
     },
-    "SMBs": {
-        "focus": "Small/medium businesses automating customer interactions",
-        "personas": [
-            "Business Owner",
-            "Operations Manager",
-            "Marketing Manager",
-            "Customer Service Lead"
-        ],
-        "specific_needs": "Cost-effective solutions, easy integration, minimal setup"
+    "Startups": {
+        "focus": "Early-stage companies building scalable applications quickly",
+        "personas": ["Technical Founder", "Product Manager"],
+        "specific_needs": "Rapid prototyping, collaboration tools, cost-effective scaling"
     },
-    "Developers/Tech Startups": {
-        "focus": "Building applications with voice capabilities",
-        "personas": [
-            "Frontend Developer",
-            "Backend Developer",
-            "Full Stack Developer",
-            "Mobile App Developer",
-            "API Integration Specialist",
-            "Machine Learning Engineer",
-            "Technical Architect",
-            "DevOps Engineer",
-            "Technical Founder",
-            "Product Manager",
-            "Developer"
-        ],
-        "specific_needs": "API access, documentation, flexible integration, SDKs, sample code"
-    },
-    "Call Centers": {
-        "focus": "Voice AI automation and enhancement for customer service operations",
-        "personas": [
-            "Call Center Director",
-            "Customer Service Operations Manager",
-            "Quality Assurance Manager",
-            "Workforce Optimization Manager",
-            "Training and Development Lead"
-        ],
-        "specific_needs": "Agent augmentation, call analytics, quality monitoring, training tools"
-    },
-    "Education Platforms": {
-        "focus": "Voice-based learning and tutoring capabilities",
-        "personas": [
-            "E-Learning Platform Designer",
-            "EdTech Product Manager",
-            "Learning Experience Director",
-            "Educational Content Manager"
-        ],
-        "specific_needs": "Language support, learning engagement, accessibility"
+    "Enterprises": {
+        "focus": "Large businesses seeking robust tools for internal or customer-facing web apps",
+        "personas": ["IT Manager", "Solution Architect"],
+        "specific_needs": "Integration with existing systems, security, and scalability"
     }
 }
 
 CONTENT_TYPES = {
     "Product Description": {
-        "focus": "Technical capabilities and benefits",
+        "focus": "Highlight features of Render’s no-code platform",
         "length": "medium",
         "style": "Professional and informative"
     },
-    "Social Media Post": {
-        "focus": "Engagement and virality",
-        "length": "short",
-        "style": "Conversational and exciting"
-    },
-    "Blog Post": {
-        "focus": "Thought leadership and education",
-        "length": "long",
-        "style": "Informative and engaging"
-    },
-    "Email Campaign": {
-        "focus": "Conversion and action",
+    "Landing Page": {
+        "focus": "Showcase Render’s value for developers and startups",
         "length": "medium",
-        "style": "Persuasive and personal"
+        "style": "Compelling and value-driven"
     },
     "Case Study": {
         "focus": "Problem-solution narrative",
         "length": "long",
         "style": "Detailed and results-focused"
     },
-    "Landing Page": {
-        "focus": "Conversion and value proposition",
+    "Email Campaign": {
+        "focus": "Conversion and action",
         "length": "medium",
-        "style": "Compelling and benefit-focused"
+        "style": "Persuasive and personal"
+    },
+    "Blog Post": {
+        "focus": "Thought leadership and education",
+        "length": "long",
+        "style": "Informative and engaging"
     }
 }
 
 def generate_content(feature, segment, persona, content_type, tone):
-    """Generate Vapi-specific content using OpenAI API"""
+    """Generate Render-specific content using OpenAI API"""
     try:
         segment_info = SEGMENTS[segment]
         content_info = CONTENT_TYPES[content_type]
-        
+
+        # Improved prompt construction with f-strings and less repetition
+        prompt = f"Generate a {content_info['length']} {content_type} for Render's no-code platform, " \
+                 f"specifically the feature: '{feature}'. "
+
         if persona == "No Persona":
-            prompt = f"""
-            Generate {content_type} content for Vapi's voice AI technology feature: {feature}
-
-            Target Audience:
-            - Segment: {segment} (Focus: {segment_info['focus']})
-            - Specific Needs: {segment_info['specific_needs']}
-            
-            Content Requirements:
-            - Type: {content_type}
-            - Focus: {content_info['focus']}
-            - Style: {content_info['style']}
-            - Tone: {tone}
-            
-            Additional Requirements:
-            1. Address key pain points for {segment} segment
-            2. Include relevant use cases
-            3. Emphasize Vapi's voice AI value proposition
-            4. Include appropriate call-to-action for {content_type}
-            
-            Make the content compelling and focused on how Vapi's voice AI technology solves specific challenges for this segment.
-            """
+            prompt += f"Target audience is the {segment} segment (Focus: {segment_info['focus']}). "
+            prompt += f"Address their specific needs: {segment_info['specific_needs']}. "
         else:
-            prompt = f"""
-            Generate {content_type} content for Vapi's voice AI technology feature: {feature}
+            prompt += f"Target audience is a {persona} within the {segment} segment. "
+            prompt += f"Focus on their specific needs: {segment_info['specific_needs']}. "
 
-            Target Audience:
-            - Segment: {segment} (Focus: {segment_info['focus']})
-            - Specific Persona: {persona}
-            - Specific Needs: {segment_info['specific_needs']}
-            
-            Content Requirements:
-            - Type: {content_type}
-            - Focus: {content_info['focus']}
-            - Style: {content_info['style']}
-            - Tone: {tone}
-            
-            Additional Requirements:
-            1. Highlight benefits specific to this {persona}'s needs
-            2. Address key pain points for {segment} segment
-            3. Include relevant use cases
-            4. Emphasize Vapi's voice AI value proposition
-            5. Include appropriate call-to-action for {content_type}
-            
-            Make the content compelling and focused on how Vapi's voice AI technology solves specific challenges for this persona.
-            """
-        
-        response = client.chat.completions.create(
+        prompt += f"Content style should be {content_info['style']} with a {tone} tone. "
+        prompt += "Emphasize Render's value proposition, address key pain points, include relevant use cases, "
+        prompt += f"and ensure the call-to-action is appropriate for a {content_type}."
+
+        response = openai.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are an experienced B2B SaaS marketing copywriter who specializes in voice AI technology and startup marketing."},
+                {"role": "system", "content": "You are an experienced B2B SaaS marketing copywriter."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0.7,
             max_tokens=500
         )
-        
+
         return response.choices[0].message.content
     except Exception as e:
         st.error(f"Error generating content: {str(e)}")
         return None
 
 # Main UI
-st.title("AI Content Generator")
-st.write("Create targeted content for an AI startup across different segments and formats.")
+st.title("Render Content Generator")
+st.write("Generate targeted marketing content for Render's no-code platform across different segments and formats.")
 
 # Input sections
 with st.form("content_form"):
     feature = st.text_area(
-        "Voice AI Feature/Capability",
-        placeholder="Describe the Vapi feature or capability you want to promote...",
+        "Feature/Capability",
+        placeholder="Describe the Render feature or capability you want to promote...",
         height=100
     )
-    
+
     col1, col2, col3 = st.columns(3)
-    
     with col1:
         segment = st.selectbox("Select Customer Segment", list(SEGMENTS.keys()))
-    
     with col2:
         selected_personas = ["No Persona"] + SEGMENTS[segment]["personas"]
         persona = st.selectbox("Select Specific Persona", selected_personas)
-    
     with col3:
         content_type = st.selectbox("Select Content Type", list(CONTENT_TYPES.keys()))
-    
+
     tone = st.selectbox(
         "Select Tone",
         ["Professional", "Technical", "Conversational", "Educational", "Persuasive", "Innovative"]
     )
-    
+
     submitted = st.form_submit_button("Generate Content")
 
 if submitted:
@@ -221,128 +135,41 @@ if submitted:
             content = generate_content(feature, segment, persona, content_type, tone)
             if content:
                 st.success("Content generated!")
-                
-                # Display segment and content type context
-                st.info(f"Segment Focus: {SEGMENTS[segment]['focus']}\nContent Type: {CONTENT_TYPES[content_type]['focus']}")
-                
-                # Display the generated content
                 st.write(f"### Generated {content_type}")
                 st.write(content)
-                
-                # Add a copy button
                 st.text_area("Copy-ready version", content, height=200)
-                
-                # Add download button
                 st.download_button(
                     label="Download Content",
                     data=content,
-                    file_name=f"vapi_{segment}_{content_type}_{tone.lower()}.txt",
+                    file_name=f"render_{segment}_{content_type}_{tone.lower()}.txt",
                     mime="text/plain"
                 )
 
-# Add usage tips in an expander
-with st.expander("💡 Tips for best results"):
+# Tips and Examples in Expanders
+with st.expander("💡 Tips for Best Results"):
     st.markdown("""
     ### Writing Effective Feature Descriptions
-    - Focus on specific voice AI capabilities
-    - Include technical specifications and advantages
-    - Highlight differentiators from competitors
-    - Mention specific problems solved
-    
-    ### Segment-Specific Considerations
-    - **Enterprise**: Focus on scalability, security, and integration
-    - **SMBs**: Emphasize ease of use and cost-effectiveness
-    - **Developers**: Highlight API capabilities and documentation
-    - **Call Centers**: Focus on efficiency, agent empowerment, and quality metrics
-    - **Education**: Emphasize engagement and accessibility features
-    
-    ### Content Type Guidelines
-    - **Product Description**: Technical details and benefits
-    - **Social Media**: Short, engaging snippets with clear CTAs
-    - **Blog Posts**: In-depth analysis and thought leadership
-    - **Email Campaigns**: Personalized and action-oriented
-    - **Case Studies**: Problem-solution format with results
-    - **Landing Pages**: Clear value proposition and benefits
+    - Focus on ease of use, scalability, and integration.
+    - Highlight differentiators from competitors.
+    - Mention specific problems solved.
 
-    ### Developer-Specific Considerations
-    - **Frontend Developers**: Focus on client-side SDKs, UI components, and WebSocket implementation
-    - **Backend Developers**: Emphasize API integration, authentication, and server-side processing
-    - **Mobile Developers**: Highlight mobile SDKs, offline capabilities, and performance optimization
-    - **ML Engineers**: Focus on model customization, training capabilities, and analytics
-    - **DevOps**: Address deployment, monitoring, and scaling considerations
-    
-    ### Technical Content Tips
-    - Include code snippets when relevant
-    - Provide specific implementation examples
-    - Reference documentation links
-    - Mention integration patterns
-    - Address performance considerations
-    - Discuss security implementations
+    ### Segment-Specific Considerations
+    - **Freelancers**: Highlight ease of use and rapid deployment.
+    - **Startups**: Emphasize prototyping and scaling capabilities.
+    - **Enterprises**: Focus on security and seamless integration.
+
+    ### Content Type Guidelines
+    - **Product Description**: Technical details and benefits.
+    - **Landing Pages**: Clear value proposition and benefits.
+    - **Case Studies**: Problem-solution format with results.
+    - **Email Campaigns**: Personalized and action-oriented.
+    - **Blog Posts**: In-depth analysis and thought leadership.
     """)
 
-# Add sample input
 with st.expander("📝 Sample Inputs"):
     st.markdown("""
-    ### Enterprise Example
-    ```
-    Feature: Advanced Call Center AI
-    - Real-time voice recognition
-    - Sentiment analysis
-    - Multiple language support
-    - Enterprise-grade security
-    - CRM integration
-    - Custom workflow automation
-    ```
-    
-    ### Call Center Example
-    ```
-    Feature: Agent Assist AI
-    - Real-time agent prompting
-    - Call sentiment analysis
-    - Automated quality scoring
-    - Performance analytics
-    - Multi-language support
-    - Agent training tools
-    - Call disposition automation
-    - Compliance monitoring
-    ```
-    
-    ### Developer Examples
-    ```
-    Feature: Voice AI API Integration
-    - RESTful API endpoints
-    - WebSocket support for real-time voice processing
-    - Multiple SDK options (Python, JavaScript, Java, Go)
-    - Custom ML model training capabilities
-    - Extensive API documentation
-    - Interactive API playground
-    - Sandbox testing environment
-    - Usage-based pricing
-    - Rate limiting controls
-    - Error handling and retry logic
-    - Real-time voice analytics
-    - Custom webhook support
-    ```
-
-    ### Developer Tools
-    - API Reference Documentation
-    - Interactive Swagger/OpenAPI specs
-    - Code snippets in multiple languages
-    - Sample applications
-    - WebSocket implementation examples
-    - Voice processing libraries
-    - Testing utilities
-    - Performance monitoring tools
-    ```
-
-    ### Integration Features
-    - OAuth 2.0 authentication
-    - API key management
-    - Rate limiting configuration
-    - Custom model deployment
-    - Webhook configuration
-    - Error logging and monitoring
-    - Performance analytics
-    - Language model fine-tuning
-    ```
+    ### Sample Feature Descriptions
+    - **Rapid Prototyping**: Build, test, and iterate web apps in hours, not days.
+    - **Backend-Agnostic Deployment**: Integrate with any backend seamlessly.
+    - **Collaboration Tools**: Enable real-time collaboration across teams.
     """)
