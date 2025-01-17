@@ -1,13 +1,13 @@
 import os
 import streamlit as st
-import openai
+from openai import OpenAI
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
-# Set OpenAI API key
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Initialize OpenAI client
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Page config (This should come before other Streamlit operations)
 st.set_page_config(
@@ -37,12 +37,12 @@ SEGMENTS = {
 
 CONTENT_TYPES = {
     "Product Description": {
-        "focus": "Highlight features of Render’s no-code platform",
+        "focus": "Highlight features of Render's no-code platform",
         "length": "medium",
         "style": "Professional and informative"
     },
     "Landing Page": {
-        "focus": "Showcase Render’s value for developers and startups",
+        "focus": "Showcase Render's value for developers and startups",
         "length": "medium",
         "style": "Compelling and value-driven"
     },
@@ -71,7 +71,7 @@ def generate_content(feature, segment, persona, content_type, tone):
 
         if persona == "No Persona":
             prompt = f"""
-            Generate {content_type} content for Render’s feature: {feature}
+            Generate {content_type} content for Render's feature: {feature}
 
             Target Audience:
             - Segment: {segment} (Focus: {segment_info['focus']})
@@ -86,14 +86,14 @@ def generate_content(feature, segment, persona, content_type, tone):
             Additional Requirements:
             1. Address key pain points for {segment} segment
             2. Include relevant use cases
-            3. Emphasize Render’s no-code platform value proposition
+            3. Emphasize Render's no-code platform value proposition
             4. Include appropriate call-to-action for {content_type}
 
             Make the content compelling and focused on how Render simplifies web app creation.
             """
         else:
             prompt = f"""
-            Generate {content_type} content for Render’s feature: {feature}
+            Generate {content_type} content for Render's feature: {feature}
 
             Target Audience:
             - Segment: {segment} (Focus: {segment_info['focus']})
@@ -110,13 +110,13 @@ def generate_content(feature, segment, persona, content_type, tone):
             1. Highlight benefits specific to this {persona}'s needs
             2. Address key pain points for {segment} segment
             3. Include relevant use cases
-            4. Emphasize Render’s no-code platform value proposition
+            4. Emphasize Render's no-code platform value proposition
             5. Include appropriate call-to-action for {content_type}
 
             Make the content compelling and focused on how Render simplifies web app creation.
             """
 
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are an experienced B2B SaaS marketing copywriter."},
@@ -126,7 +126,7 @@ def generate_content(feature, segment, persona, content_type, tone):
             max_tokens=500
         )
 
-        return response.choices[0].message['content']
+        return response.choices[0].message.content
     except Exception as e:
         st.error(f"Error generating content: {str(e)}")
         return None
