@@ -69,22 +69,54 @@ def generate_content(feature, segment, persona, content_type, tone):
         segment_info = SEGMENTS[segment]
         content_info = CONTENT_TYPES[content_type]
 
-        # Improved prompt construction with f-strings and less repetition
-        prompt = f"Generate a {content_info['length']} {content_type} for Render's no-code platform, " \
-                 f"specifically the feature: '{feature}'. "
-
         if persona == "No Persona":
-            prompt += f"Target audience is the {segment} segment (Focus: {segment_info['focus']}). "
-            prompt += f"Address their specific needs: {segment_info['specific_needs']}. "
+            prompt = f"""
+            Generate {content_type} content for Render’s feature: {feature}
+
+            Target Audience:
+            - Segment: {segment} (Focus: {segment_info['focus']})
+            - Specific Needs: {segment_info['specific_needs']}
+
+            Content Requirements:
+            - Type: {content_type}
+            - Focus: {content_info['focus']}
+            - Style: {content_info['style']}
+            - Tone: {tone}
+
+            Additional Requirements:
+            1. Address key pain points for {segment} segment
+            2. Include relevant use cases
+            3. Emphasize Render’s no-code platform value proposition
+            4. Include appropriate call-to-action for {content_type}
+
+            Make the content compelling and focused on how Render simplifies web app creation.
+            """
         else:
-            prompt += f"Target audience is a {persona} within the {segment} segment. "
-            prompt += f"Focus on their specific needs: {segment_info['specific_needs']}. "
+            prompt = f"""
+            Generate {content_type} content for Render’s feature: {feature}
 
-        prompt += f"Content style should be {content_info['style']} with a {tone} tone. "
-        prompt += "Emphasize Render's value proposition, address key pain points, include relevant use cases, "
-        prompt += f"and ensure the call-to-action is appropriate for a {content_type}."
+            Target Audience:
+            - Segment: {segment} (Focus: {segment_info['focus']})
+            - Specific Persona: {persona}
+            - Specific Needs: {segment_info['specific_needs']}
 
-        response = openai.chat.completions.create(
+            Content Requirements:
+            - Type: {content_type}
+            - Focus: {content_info['focus']}
+            - Style: {content_info['style']}
+            - Tone: {tone}
+
+            Additional Requirements:
+            1. Highlight benefits specific to this {persona}'s needs
+            2. Address key pain points for {segment} segment
+            3. Include relevant use cases
+            4. Emphasize Render’s no-code platform value proposition
+            5. Include appropriate call-to-action for {content_type}
+
+            Make the content compelling and focused on how Render simplifies web app creation.
+            """
+
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are an experienced B2B SaaS marketing copywriter."},
@@ -94,10 +126,11 @@ def generate_content(feature, segment, persona, content_type, tone):
             max_tokens=500
         )
 
-        return response.choices[0].message.content
+        return response.choices[0].message['content']
     except Exception as e:
         st.error(f"Error generating content: {str(e)}")
         return None
+
 
 # Main UI
 st.title("Render Content Generator")
