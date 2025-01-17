@@ -7,10 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialize OpenAI client
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
-    base_url="https://api.openai.com/v1"  # Explicitly set the base URL
-)
+client = OpenAI()  # Will automatically use OPENAI_API_KEY from environment
 
 # Page config (This should come before other Streamlit operations)
 st.set_page_config(
