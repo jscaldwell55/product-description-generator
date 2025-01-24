@@ -142,7 +142,7 @@ def generate_content(feature, segment, persona, content_type, tone):
 
 
 # Main UI
-st.title("Render Content Generator")
+st.title("AI Content Generator")
 st.write("Generate targeted marketing content for startup's no-code platform across different segments and formats.")
 
 # Input sections
