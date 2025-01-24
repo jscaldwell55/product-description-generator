@@ -20,7 +20,7 @@ client = OpenAI(
 
 # Page config (This should come before other Streamlit operations)
 st.set_page_config(
-    page_title="Render AI Content Generator",
+    page_title="AI Content Generator",
     page_icon="⚡",
     layout="wide"
 )
@@ -46,12 +46,12 @@ SEGMENTS = {
 
 CONTENT_TYPES = {
     "Product Description": {
-        "focus": "Highlight features of Render's no-code platform",
+        "focus": "Highlight features of no-code platform",
         "length": "medium",
         "style": "Professional and informative"
     },
     "Landing Page": {
-        "focus": "Showcase Render's value for developers and startups",
+        "focus": "Showcase value for developers and startups",
         "length": "medium",
         "style": "Compelling and value-driven"
     },
@@ -73,14 +73,14 @@ CONTENT_TYPES = {
 }
 
 def generate_content(feature, segment, persona, content_type, tone):
-    """Generate Render-specific content using OpenAI API"""
+    """Generate startup-specific content using OpenAI API"""
     try:
         segment_info = SEGMENTS[segment]
         content_info = CONTENT_TYPES[content_type]
 
         if persona == "No Persona":
             prompt = f"""
-            Generate {content_type} content for Render's feature: {feature}
+            Generate {content_type} content for startup's feature: {feature}
 
             Target Audience:
             - Segment: {segment} (Focus: {segment_info['focus']})
@@ -95,14 +95,14 @@ def generate_content(feature, segment, persona, content_type, tone):
             Additional Requirements:
             1. Address key pain points for {segment} segment
             2. Include relevant use cases
-            3. Emphasize Render's no-code platform value proposition
+            3. Emphasize startup's no-code platform value proposition
             4. Include appropriate call-to-action for {content_type}
 
-            Make the content compelling and focused on how Render simplifies web app creation.
+            Make the content compelling and focused on how startup simplifies web app creation.
             """
         else:
             prompt = f"""
-            Generate {content_type} content for Render's feature: {feature}
+            Generate {content_type} content for startup's feature: {feature}
 
             Target Audience:
             - Segment: {segment} (Focus: {segment_info['focus']})
@@ -119,10 +119,10 @@ def generate_content(feature, segment, persona, content_type, tone):
             1. Highlight benefits specific to this {persona}'s needs
             2. Address key pain points for {segment} segment
             3. Include relevant use cases
-            4. Emphasize Render's no-code platform value proposition
+            4. Emphasize startup's no-code platform value proposition
             5. Include appropriate call-to-action for {content_type}
 
-            Make the content compelling and focused on how Render simplifies web app creation.
+            Make the content compelling and focused on how startup simplifies web app creation.
             """
 
         response = client.chat.completions.create(
@@ -143,13 +143,13 @@ def generate_content(feature, segment, persona, content_type, tone):
 
 # Main UI
 st.title("Render Content Generator")
-st.write("Generate targeted marketing content for Render's no-code platform across different segments and formats.")
+st.write("Generate targeted marketing content for startup's no-code platform across different segments and formats.")
 
 # Input sections
 with st.form("content_form"):
     feature = st.text_area(
         "Feature/Capability",
-        placeholder="Describe the Render feature or capability you want to promote...",
+        placeholder="Describe the startup feature or capability you want to promote...",
         height=100
     )
 
@@ -183,7 +183,7 @@ if submitted:
                 st.download_button(
                     label="Download Content",
                     data=content,
-                    file_name=f"render_{segment}_{content_type}_{tone.lower()}.txt",
+                    file_name=f"startup_{segment}_{content_type}_{tone.lower()}.txt",
                     mime="text/plain"
                 )
 
